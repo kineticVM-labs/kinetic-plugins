@@ -1,0 +1,9 @@
+# Codes live in host state. The signed record never includes a code.
+
+name = "vend_plugin"
+version = "0.1.0"
+description = "Issue and check four-digit vend codes on the device, and record the sale without the code."
+wasm_path = "plugin.wasm"
+wasm_sha256 = "8e0940a305a6b32b1ec7f6af8b8e3e578cc7e768651eaede08182de61e9e233b"
+capabilities = ["tool", "skill"]
+permissions = ["state_read", "state_write"]

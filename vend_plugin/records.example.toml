@@ -1,0 +1,44 @@
+# kinetic plugin install writes these fields into the device config.
+# Installing the plugin again replaces them.
+# The host checks these fields, signs that JSON, and stores the line.
+# A keypad code is not a field. Chat ids and wallets are not fields.
+
+[[records.fields]]
+name = "action"
+type = "string"
+required = true
+
+[[records.fields]]
+name = "detail"
+type = "string"
+required = true
+
+[[records.fields]]
+name = "item"
+type = "string"
+required = true
+
+[[records.fields]]
+name = "machine"
+type = "string"
+required = true
+
+[[records.fields]]
+name = "pin"
+type = "string"
+required = true
+
+[[records.fields]]
+name = "price_mon"
+type = "string"
+required = true
+
+[[records.fields]]
+name = "result"
+type = "string"
+required = true
+
+[[records.fields]]
+name = "slot"
+type = "string"
+required = true

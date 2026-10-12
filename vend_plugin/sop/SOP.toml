@@ -1,0 +1,32 @@
+# The machine procedure. Kinetic installs this directory on `kinetic plugin install`.
+# A Telegram sale is the skill, not a second trigger: a channel trigger would
+# start this procedure on every chat message.
+# Set agent to the alias in your config. A keypad run has no chat turn to borrow.
+
+[sop]
+name = "vend"
+description = "Check a keypad code, move one drink, and record the result without the code."
+version = "0.1.0"
+execution_mode = "auto"
+agent = "default"
+max_concurrent = 4
+
+[[triggers]]
+type = "peripheral"
+board = "esp32"
+signal = "keypad"
+
+[[triggers]]
+type = "peripheral"
+board = "esp32"
+signal = "dispensed"
+
+[[triggers]]
+type = "peripheral"
+board = "esp32"
+signal = "error"
+
+[[triggers]]
+type = "peripheral"
+board = "esp32"
+signal = "boot"
