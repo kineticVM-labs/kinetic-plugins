@@ -1,7 +1,7 @@
 # vend_plugin
 
-Issues a four-digit keypad code on the device, checks that code when the
-keypad sends it, and returns an attestation the device can sign. The code
+Quotes a drink, sends the device vault payment link, and issues a four-digit
+keypad code only after the vault balance has risen by the price. The code
 stays in plugin state. It is not a record field.
 
 ## Drinks
@@ -34,9 +34,16 @@ record fields.
 
 ## What runs where
 
-Chat uses the skill. `quote` lists the drinks. `issue_code` stores a code and
-returns the sentence to tell the customer, plus `attest` fields for
-`monad_attest`. Copy `attest.params` as given. Do not add the code.
+Chat uses the skill. `quote` lists the drinks. `start_sale` stores one unpaid
+sale and returns the payment link. `confirm_payment` compares a new
+`vault_status` balance with the balance from before payment. The code is
+stored only when that balance has risen by the drink price. Copy
+`attest.params` as given. Do not add the code.
+
+The payment link is `https://vault-deposit.kineticvm.xyz` for the published
+testnet vault `0x77102fCAC7927bB64507DF82bf1ae659465B4EE5` and the agent id
+from `monad_identity`. The plugin checks the balance the agent read from
+`vault_status`. It does not call the chain itself.
 
 The `vend` procedure runs when the board sends `keypad`, `dispensed`,
 `error`, or `boot`. A valid code calls `gpio_write` and waits for

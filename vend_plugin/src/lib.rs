@@ -3,7 +3,7 @@
 
 mod ledger;
 
-pub use ledger::{fail, finish, issue, quote, redeem, release, Ledger};
+pub use ledger::{confirm_payment, fail, finish, quote, redeem, release, start_sale, Ledger};
 
 #[cfg(target_family = "wasm")]
 mod component {
@@ -18,7 +18,9 @@ mod component {
     use kinetic::plugin::state::{get as state_get, put as state_put, StateError};
     use serde_json::Value;
 
-    use crate::ledger::{fail, finish, issue, quote, redeem, release, Ledger};
+    use crate::ledger::{
+        confirm_payment, fail, finish, quote, redeem, release, start_sale, Ledger,
+    };
 
     const LEDGER: &str = "ledger";
     const ATTEMPTS: u32 = 4;
@@ -31,7 +33,7 @@ mod component {
         }
 
         fn plugin_version() -> String {
-            "0.1.0".to_string()
+            "0.1.1".to_string()
         }
     }
 
@@ -44,9 +46,14 @@ mod component {
                     r#"{"type":"object","properties":{}}"#,
                 ),
                 tool(
-                    "issue_code",
-                    "Issue a random four-digit keypad code for one drink and store it on this device. drink is Cola, Water, or Juice. Tell the customer tell_customer. Then call monad_attest with attest.action, attest.params, and attest.request_uri. Never put the code into the attestation.",
-                    r#"{"type":"object","properties":{"drink":{"type":"string"}},"required":["drink"]}"#,
+                    "start_sale",
+                    "Open one unpaid sale. drink is Cola, Water, or Juice. agent is the agent number from monad_identity. balance is the Balance number from vault_status, before payment. Returns a payment link and tell_customer. There is no code. Do not call monad_attest yet. Do not invent a code.",
+                    r#"{"type":"object","properties":{"drink":{"type":"string"},"agent":{"type":"string"},"balance":{"type":"string"}},"required":["drink","agent","balance"]}"#,
+                ),
+                tool(
+                    "confirm_payment",
+                    "Check the new vault_status Balance against the open sale. Pass that Balance number as balance. If the vault has not risen by the drink price, this fails and no code exists. If it has, this stores a four-digit code. Tell the customer tell_customer. Then call monad_attest with attest.action, attest.params, and attest.request_uri. Never put the code into the attestation.",
+                    r#"{"type":"object","properties":{"balance":{"type":"string"}},"required":["balance"]}"#,
                 ),
                 tool(
                     "redeem_code",
@@ -76,7 +83,17 @@ mod component {
                 .map_err(|error| format!("args are not valid JSON: {error}"))?;
             match name.as_str() {
                 "quote" => Ok(done(quote())),
-                "issue_code" => mutate(|ledger| issue(ledger, required(&parsed, "drink")?, salt())),
+                "start_sale" => mutate(|ledger| {
+                    start_sale(
+                        ledger,
+                        required(&parsed, "drink")?,
+                        required(&parsed, "agent")?,
+                        required(&parsed, "balance")?,
+                    )
+                }),
+                "confirm_payment" => {
+                    mutate(|ledger| confirm_payment(ledger, required(&parsed, "balance")?, salt()))
+                }
                 "redeem_code" => mutate(|ledger| Ok(redeem(ledger, required(&parsed, "code")?))),
                 "finish_dispense" => mutate(|ledger| finish(ledger, required(&parsed, "slot")?)),
                 "fail_dispense" => mutate(|ledger| Ok(fail(ledger, required(&parsed, "reason")?))),

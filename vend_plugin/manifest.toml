@@ -1,9 +1,9 @@
-# Codes live in host state. The signed record never includes a code.
+# Codes live in host state. A code is stored only after payment. The signed record never includes a code.
 
 name = "vend_plugin"
-version = "0.1.0"
-description = "Issue and check four-digit vend codes on the device, and record the sale without the code."
+version = "0.1.1"
+description = "Quote a drink, send the vault payment link, and issue a keypad code only after the vault balance rises."
 wasm_path = "plugin.wasm"
-wasm_sha256 = "8e0940a305a6b32b1ec7f6af8b8e3e578cc7e768651eaede08182de61e9e233b"
+wasm_sha256 = "06770563e8488fa0251457c4353dce323bdea61d44a95af2c52b0f354e32a54e"
 capabilities = ["tool", "skill"]
 permissions = ["state_read", "state_write"]
