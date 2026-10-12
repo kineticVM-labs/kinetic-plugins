@@ -15,6 +15,10 @@ stays in plugin state. It is not a record field.
 Pin 0 tells the board the code was refused. Pins 1, 2, and 3 start that drink.
 The board answers later on `esp32/dispensed`.
 
+## Firmware
+
+`vend-esp32/` is the sketch for the machine's ESP32. It is not part of the plugin. `kinetic plugin install` does not copy it, flash it, or load it. Flash `vend-esp32/vend-esp32.ino` onto the board with the Arduino IDE, using the same board and the same libraries as the sketch already on the machine. The plugin only runs on the Pi.
+
 ## Install
 
 The device agent alias in `sop/SOP.toml` is `default`. Change it to the alias
