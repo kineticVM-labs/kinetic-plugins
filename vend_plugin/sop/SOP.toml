@@ -1,7 +1,8 @@
 # The machine procedure. Kinetic installs this directory on `kinetic plugin install`.
 # A Telegram sale is the skill, not a second trigger: a channel trigger would
 # start this procedure on every chat message.
-# Set agent to the alias in your config. A keypad run has no chat turn to borrow.
+# A keypad press has no chat turn. It runs as agent "default", and the device
+# config must contain [agents.default]. The Pi scaffold defines that agent.
 
 [sop]
 name = "vend"

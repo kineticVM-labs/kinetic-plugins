@@ -21,8 +21,10 @@ The board answers later on `esp32/dispensed`.
 
 ## Install
 
-The device agent alias in `sop/SOP.toml` is `default`. Change it to the alias
-in your Kinetic config before installing.
+`sop/SOP.toml` runs the keypad as agent `default`. The device config must
+contain `[agents.default]`. The Pi scaffold includes that block. A keypad
+press fails before any tool call when that agent is missing. Rename the
+agent in both places together, or leave both as `default`.
 
 ```bash
 kinetic plugin install /path/to/vend_plugin
