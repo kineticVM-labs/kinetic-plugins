@@ -21,10 +21,9 @@ The board answers later on `esp32/dispensed`.
 
 ## Install
 
-`sop/SOP.toml` runs the keypad as agent `default`. The device config must
-contain `[agents.default]`. The Pi scaffold includes that block. A keypad
-press fails before any tool call when that agent is missing. Rename the
-agent in both places together, or leave both as `default`.
+`sop/SOP.toml` runs the keypad as agent `device`. That is the agent
+`kinetic quickstart` creates, with its model and risk profile. A keypad
+press fails before any tool call when the procedure names a different agent.
 
 ```bash
 kinetic plugin install /path/to/vend_plugin
